@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<objects xmlns="http://www.springframework.net"
+         xmlns:tx="http://www.springframework.net/tx"
+         xmlns:aop="http://www.springframework.net/aop"
+         xmlns:db="http://www.springframework.net/database">
+
+  <object id="debogLogInterceptor" type="KuasCore.Interceptors.DebogLogInterceptor" />
+  <object id="updateEmployeeNameInterceptor" type="KuasCore.Interceptors.UpdateEmployeeNameInterceptor" />
+
+  <object id="servicePointcut" type="Spring.Aop.Support.SdkRegularExpressionMethodPointcut, Spring.Aop">
+    <property name="Pattern" value="KuasCore.Services.Impl.*Service" />
+  </object>
+
+  <object id="updateEmployeePointcut" type="Spring.Aop.Support.SdkRegularExpressionMethodPointcut, Spring.Aop">
+    <property name="Pattern" value="KuasCore.Services.Impl.EmployeeService.GetEmployeeById" />
+  </object>
+
+  <aop:config>
+    <aop:advisor pointcut-ref="servicePointcut" advice-ref="debogLogInterceptor" />
+    <!--<aop:advisor pointcut-ref="updateEmployeePointcut" advice-ref="updateEmployeeNameInterceptor" />-->
+  </aop:config>
+
+  <!-- AOP Transaction Advice 設定-->
+  <object id="serviceTxPointcut"
+          type="Spring.Aop.Support.SdkRegularExpressionMethodPointcut, Spring.Aop">
+    <property name="Pattern" value="KuasCore.Services.Impl.*Service" />
+  </object>
+
+  <aop:config>
+    <aop:advisor pointcut-ref="serviceTxPointcut" advice-ref="txAdvice" />
+  </aop:config>
+</objects>
